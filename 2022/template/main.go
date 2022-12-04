@@ -7,20 +7,10 @@ import (
 	"os"
 )
 
-func main() {
-	inputs := readInput()
-	problem1(inputs)
-}
-
-func problem1(inputs []string) {
-	// parse inputs
-	for _, v := range inputs {
-		fmt.Println(v)
-	}
-}
+type item string
 
 func readInput() []string {
-	file, err := os.Open("input.txt")
+	file, err := os.Open("input")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -34,4 +24,33 @@ func readInput() []string {
 	}
 
 	return inputs
+}
+
+func parseInput(input []string) []item {
+	var items []item
+	for _, v := range input {
+		items = append(items, item(v))
+	}
+	return items
+}
+
+func SolvePart1(inputs []item) {
+	for _, v := range inputs {
+		fmt.Println(v)
+	}
+	fmt.Println("Part 1: Result")
+}
+
+func SolvePart2(inputs []item) {
+	for _, v := range inputs {
+		fmt.Println(v)
+	}
+	fmt.Println("Part 2: Result")
+}
+
+func main() {
+	inputs := readInput()
+	items := parseInput(inputs)
+	SolvePart1(items)
+	SolvePart2(items)
 }
