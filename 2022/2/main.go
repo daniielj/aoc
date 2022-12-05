@@ -26,21 +26,19 @@ const (
 
 type round struct {
 	opponent shape
-	you      shape
+	me       shape
 	outcome  outcome
 }
 
 func (r round) score() int {
-	var score int = r.you.score()
+	var score int = r.me.score()
 	switch {
-	case r.opponent == r.you:
+	case r.opponent == r.me:
 		score += 3
-	case r.you == PAPER && r.opponent == ROCK,
-		r.you == ROCK && r.opponent == SCISSORS,
-		r.you == SCISSORS && r.opponent == PAPER:
+	case r.me == PAPER && r.opponent == ROCK,
+		r.me == ROCK && r.opponent == SCISSORS,
+		r.me == SCISSORS && r.opponent == PAPER:
 		score += 6
-	default:
-		score += 0
 	}
 	return score
 }
@@ -74,14 +72,14 @@ func parseInputs(input []string) []round {
 		'B': PAPER,
 		'C': SCISSORS,
 	}
-	y := map[byte]shape{
+	m := map[byte]shape{
 		'X': ROCK,
 		'Y': PAPER,
 		'Z': SCISSORS,
 	}
 
 	for _, v := range input {
-		r = append(r, round{opponent: o[v[0]], you: y[v[2]]})
+		r = append(r, round{opponent: o[v[0]], me: m[v[2]]})
 	}
 	return r
 }
@@ -102,7 +100,7 @@ func parseInputs2(input []string) []round {
 	}
 
 	for _, v := range input {
-		r = append(r, round{opponent: c(v[0]), you: c(v[2])})
+		r = append(r, round{opponent: c(v[0]), me: c(v[2])})
 	}
 	return r
 }
@@ -138,18 +136,20 @@ func SolvePart1(input []round) {
 
 func SolvePart2(input []round) {
 	var sum int
+
 	f := func(r round) shape {
+		var me shape = r.opponent
 		switch r.outcome {
 		case LOSE:
-			r.opponent = (r.opponent+4)%3 + 1
+			me = (r.opponent+1)%3 + 1
 		case WIN:
-			r.opponent = r.opponent%3 + 1
+			me = r.opponent%3 + 1
 		}
-		return r.opponent
+		return me
 	}
 
 	for _, r := range input {
-		r.you = f(r)
+		r.me = f(r)
 		sum += r.score()
 	}
 
