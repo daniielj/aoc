@@ -19,7 +19,6 @@ type dir struct {
 	name  string
 	dirs  map[string]dir
 	files map[string]file
-	size  int
 }
 
 func readInput() []string {
@@ -40,7 +39,7 @@ func readInput() []string {
 }
 
 func (d dir) addDir(n string) {
-	d.dirs[n] = dir{n, make(map[string]dir), make(map[string]file), 0}
+	d.dirs[n] = dir{n, make(map[string]dir), make(map[string]file)}
 }
 
 func (d dir) addFile(n string, size int) {
@@ -48,7 +47,7 @@ func (d dir) addFile(n string, size int) {
 }
 
 func parseInput(input []string) dir {
-	var root dir = dir{"/", make(map[string]dir), make(map[string]file), 0}
+	var root dir = dir{"/", make(map[string]dir), make(map[string]file)}
 	var s []dir = []dir{root}
 	for _, v := range input {
 		switch {
