@@ -63,34 +63,42 @@ func parseInput(input []string) inputT {
 			}
 		}
 	}
+	// Reverse stacks
+	for i := range data.stacks {
+		n := len(data.stacks[i]) - 1
+		for j := 0; j < n/2; j++ {
+			t := data.stacks[i][j]
+			data.stacks[i][j] = data.stacks[i][n-j]
+			data.stacks[i][n-j] = t
+		}
+	}
 	return data
 }
 
 func SolvePart1(d inputT) {
 	for _, v := range d.moves {
 		for i := 0; i < v.count; i++ {
-			e := d.stacks[v.from-1][0]
-			d.stacks[v.from-1] = d.stacks[v.from-1][1:]
-			d.stacks[v.to-1] = append([]byte{e}, d.stacks[v.to-1]...)
+			l := len(d.stacks[v.from-1])
+			d.stacks[v.to-1] = append(d.stacks[v.to-1], d.stacks[v.from-1][l-1])
+			d.stacks[v.from-1] = d.stacks[v.from-1][:l-1]
 		}
 	}
 	fmt.Printf("Part 1: Result = ")
 	for _, v := range d.stacks {
-		fmt.Printf("%c", v[0])
+		fmt.Printf("%c", v[len(v)-1])
 	}
 	fmt.Println("")
 }
 
 func SolvePart2(d inputT) {
 	for _, v := range d.moves {
-		e := make([]byte, v.count)
-		copy(e, d.stacks[v.from-1][:v.count])
-		d.stacks[v.from-1] = d.stacks[v.from-1][v.count:]
-		d.stacks[v.to-1] = append(e, d.stacks[v.to-1]...)
+		l := len(d.stacks[v.from-1])
+		d.stacks[v.to-1] = append(d.stacks[v.to-1], d.stacks[v.from-1][l-v.count:]...)
+		d.stacks[v.from-1] = d.stacks[v.from-1][:l-v.count]
 	}
 	fmt.Printf("Part 2: Result = ")
 	for _, v := range d.stacks {
-		fmt.Printf("%c", v[0])
+		fmt.Printf("%c", v[len(v)-1])
 	}
 	fmt.Println("")
 }
